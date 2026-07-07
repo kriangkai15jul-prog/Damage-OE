@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Admin | Damage OE Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero hero--compact">
+    <div class="hero__sheen"></div>
+    <div class="hero__inner">
+      <p class="hero__eyebrow">Admin</p>
+      <h1 class="hero__title hero__title--sm">จัดการรายการฟอร์ม</h1>
+      <p class="hero__subtitle">แก้ไขแผนก, ประเภทอุปกรณ์, สาเหตุ และรายการของเสียหาย</p>
+      <div class="hero__rule"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===== Password Gate ===== -->
+    <div id="gateCard" class="card">
+      <div class="field">
+        <label class="field__label" for="adminPassword">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          </span>
+          รหัสผ่านผู้ดูแลระบบ
+        </label>
+        <input type="password" id="adminPassword" class="input" placeholder="กรอกรหัสผ่าน" autocomplete="off">
+      </div>
+      <button type="button" id="loginBtn" class="btn btn--primary" style="width:100%;">
+        <span class="btn__label">เข้าสู่ระบบ</span>
+        <span class="btn__spinner" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- ===== Editor (hidden until password correct) ===== -->
+    <form id="editorForm" class="card hidden">
+
+      <div class="field">
+        <label class="field__label" for="listDepartments">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 21V8l8-4 8 4v13"/><path d="M9 21v-6h6v6"/></svg>
+          </span>
+          รายชื่อแผนก
+        </label>
+        <textarea id="listDepartments" class="input textarea" rows="6" placeholder="พิมพ์ 1 รายการต่อ 1 บรรทัด"></textarea>
+        <p class="field__hint">พิมพ์ชื่อแผนกละ 1 บรรทัด ระบบจะเพิ่มตัวเลือก &quot;อื่นๆ&quot; ให้อัตโนมัติเสมอ ไม่ต้องพิมพ์เอง</p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="listEquipment">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 2v6a4 4 0 0 0 8 0V2"/><path d="M12 12v10"/></svg>
+          </span>
+          ประเภทของอุปกรณ์
+        </label>
+        <textarea id="listEquipment" class="input textarea" rows="6" placeholder="พิมพ์ 1 รายการต่อ 1 บรรทัด"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="listCauses">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2 2 20h20L12 2z"/><path d="M12 9v5M12 17h.01"/></svg>
+          </span>
+          สาเหตุ
+        </label>
+        <textarea id="listCauses" class="input textarea" rows="5" placeholder="พิมพ์ 1 รายการต่อ 1 บรรทัด"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="listItems">
+          <span class="field__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          </span>
+          รายการของเสียหาย (คำแนะนำ)
+        </label>
+        <textarea id="listItems" class="input textarea" rows="8" placeholder="พิมพ์ 1 รายการต่อ 1 บรรทัด"></textarea>
+        <p class="field__hint">รายการเหล่านี้เป็นแค่คำแนะนำ พนักงานยังพิมพ์ชื่ออื่นเองได้เสมอ</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="reloadBtn" class="btn btn--ghost">โหลดข้อมูลล่าสุด</button>
+        <button type="submit" id="saveBtn" class="btn btn--primary">
+          <span class="btn__label">บันทึกการเปลี่ยนแปลง</span>
+          <span class="btn__spinner" aria-hidden="true"></span>
+        </button>
+      </div>
+    </form>
+
+    <p class="admin-back"><a href="index.html">&larr; กลับไปหน้าฟอร์มแจ้งของเสียหาย</a></p>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Hotel Damage Report System</p>
+    </footer>
+  </main>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>
