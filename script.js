@@ -14,6 +14,8 @@ const form            = document.getElementById("damageForm");
 const reportDateEl    = document.getElementById("reportDate");
 const departmentEl    = document.getElementById("department");
 const departmentOther = document.getElementById("departmentOther");
+const locationEl      = document.getElementById("location");
+const locationOther   = document.getElementById("locationOther");
 const equipTypeEl     = document.getElementById("equipType");
 const equipTypeOther  = document.getElementById("equipTypeOther");
 const causeEl         = document.getElementById("cause");
@@ -37,7 +39,8 @@ const DEFAULT_CONFIG = {
   departments: ["Front Office","Housekeeping","Kitchen","Restaurant","Bar","Engineering","Accounting","Sales","HR","Security","Spa","Laundry"],
   equipmentTypes: ["แก้ว","จาน","ชาม","ถ้วยกาแฟ","แก้วไวน์","แก้วเบียร์","ช้อน","ส้อม","มีด","อุปกรณ์ครัว","เครื่องใช้ไฟฟ้า"],
   causes: ["แตก","ร้าว","บิ่น","สูญหาย","ชำรุด"],
-  itemSuggestions: ["แก้วน้ำ Hi-ball","แก้วไวน์แดง","แก้วไวน์ขาว","จานหลัก 10 นิ้ว","จานรอง","ชามซุป","ถ้วยกาแฟ + จานรอง","ช้อนโต๊ะ","ส้อมโต๊ะ","มีดสเต็ก","กระทะ","หม้อ"]
+  itemSuggestions: ["แก้วน้ำ Hi-ball","แก้วไวน์แดง","แก้วไวน์ขาว","จานหลัก 10 นิ้ว","จานรอง","ชามซุป","ถ้วยกาแฟ + จานรอง","ช้อนโต๊ะ","ส้อมโต๊ะ","มีดสเต็ก","กระทะ","หม้อ"],
+  locations: ["ห้องอาหาร","ล็อบบี้","ครัวกลาง","บาร์","สระว่ายน้ำ","สปา","ห้องประชุม","ห้องพักแขก"]
 };
 
 // ---------- Init ----------
@@ -60,7 +63,8 @@ async function loadFormConfig(){
           departments: data.departments?.length ? data.departments : DEFAULT_CONFIG.departments,
           equipmentTypes: data.equipmentTypes?.length ? data.equipmentTypes : DEFAULT_CONFIG.equipmentTypes,
           causes: data.causes?.length ? data.causes : DEFAULT_CONFIG.causes,
-          itemSuggestions: data.itemSuggestions?.length ? data.itemSuggestions : DEFAULT_CONFIG.itemSuggestions
+          itemSuggestions: data.itemSuggestions?.length ? data.itemSuggestions : DEFAULT_CONFIG.itemSuggestions,
+          locations: data.locations?.length ? data.locations : DEFAULT_CONFIG.locations
         };
         // อัปเดตเป็นรายการล่าสุดจาก Google Sheet (ถ้าต่างจากค่าเริ่มต้น)
         applyConfig(config);
@@ -75,6 +79,7 @@ function applyConfig(config){
   populateSelect(departmentEl, config.departments);
   populateSelect(equipTypeEl, config.equipmentTypes);
   populateSelect(causeEl, config.causes);
+  populateSelect(locationEl, config.locations);
   populateDatalist(document.getElementById("itemSuggestions"), config.itemSuggestions);
 }
 
@@ -132,6 +137,7 @@ function bindOtherToggle(select, otherInput){
   });
 }
 bindOtherToggle(departmentEl, departmentOther);
+bindOtherToggle(locationEl, locationOther);
 bindOtherToggle(equipTypeEl, equipTypeOther);
 bindOtherToggle(causeEl, causeOther);
 
@@ -226,9 +232,11 @@ function resetForm(){
   setTodayDate();
   quantityEl.value = 1;
   departmentOther.classList.add("hidden");
+  locationOther.classList.add("hidden");
   equipTypeOther.classList.add("hidden");
   causeOther.classList.add("hidden");
   departmentOther.required = false;
+  locationOther.required = false;
   equipTypeOther.required = false;
   causeOther.required = false;
   photoFiles = [];
@@ -249,7 +257,7 @@ form.addEventListener("submit", async (e) => {
     date: formatThaiDate(reportDateEl.value),
     timestamp: new Date().toISOString(),
     department: departmentEl.value === "อื่นๆ" ? departmentOther.value.trim() : departmentEl.value,
-    location: document.getElementById("location").value.trim(),
+    location: locationEl.value === "อื่นๆ" ? locationOther.value.trim() : locationEl.value,
     equipType: equipTypeEl.value === "อื่นๆ" ? equipTypeOther.value.trim() : equipTypeEl.value,
     itemName: document.getElementById("itemName").value.trim(),
     quantity: quantityEl.value,

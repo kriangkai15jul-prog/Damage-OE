@@ -70,7 +70,11 @@
           </span>
           สถานที่ / Outlet <span class="req">*</span>
         </label>
-        <input type="text" id="location" class="input" placeholder="เช่น ห้องอาหาร, ล็อบบี้, ครัวกลาง" required>
+        <select id="location" class="input select" required>
+          <option value="" disabled selected>เลือกสถานที่</option>
+          <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        <input type="text" id="locationOther" class="input input--other hidden" placeholder="ระบุสถานที่...">
       </div>
 
       <!-- 4. ประเภทของอุปกรณ์ -->

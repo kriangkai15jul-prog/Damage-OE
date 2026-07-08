@@ -17,6 +17,7 @@ const toastEl       = document.getElementById("toast");
 const yearEl        = document.getElementById("year");
 
 const listDepartments = document.getElementById("listDepartments");
+const listLocations   = document.getElementById("listLocations");
 const listEquipment   = document.getElementById("listEquipment");
 const listCauses      = document.getElementById("listCauses");
 const listItems        = document.getElementById("listItems");
@@ -86,12 +87,14 @@ async function fetchConfig(){
     departments: data.departments || [],
     equipmentTypes: data.equipmentTypes || [],
     causes: data.causes || [],
-    itemSuggestions: data.itemSuggestions || []
+    itemSuggestions: data.itemSuggestions || [],
+    locations: data.locations || []
   };
 }
 
 function fillEditor(config){
   listDepartments.value = config.departments.join("\n");
+  listLocations.value = config.locations.join("\n");
   listEquipment.value = config.equipmentTypes.join("\n");
   listCauses.value = config.causes.join("\n");
   listItems.value = config.itemSuggestions.join("\n");
@@ -119,7 +122,8 @@ editorForm.addEventListener("submit", async (e) => {
     departments: toLines(listDepartments.value),
     equipmentTypes: toLines(listEquipment.value),
     causes: toLines(listCauses.value),
-    itemSuggestions: toLines(listItems.value)
+    itemSuggestions: toLines(listItems.value),
+    locations: toLines(listLocations.value)
   };
 
   setLoading(saveBtn, true);
