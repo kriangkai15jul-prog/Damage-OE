@@ -81,7 +81,7 @@ passwordInput.addEventListener("keydown", (e) => {
 
 // ---------- โหลดข้อมูลปัจจุบันจาก Google Sheet ----------
 async function fetchConfig(){
-  const res = await fetch(`${APPS_SCRIPT_URL}?action=getConfig`);
+  const res = await fetch(`${APPS_SCRIPT_URL}?action=getConfig&_=${Date.now()}`, { cache: "no-store" });
   const data = await res.json();
   return {
     departments: data.departments || [],

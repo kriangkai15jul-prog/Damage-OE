@@ -56,7 +56,7 @@ async function loadFormConfig(){
 
   try{
     if(!APPS_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")){
-      const res = await fetch(`${APPS_SCRIPT_URL}?action=getConfig`);
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=getConfig&_=${Date.now()}`, { cache: "no-store" });
       const data = await res.json();
       if(data && data.status !== "error"){
         const config = {
