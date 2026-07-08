@@ -48,23 +48,30 @@ loadFormConfig();
 // ดึงรายการแผนก/ประเภทอุปกรณ์/สาเหตุ/รายการของเสียหาย จาก Google Sheet (ชีต Config)
 // เพื่อให้ Admin แก้ไขรายการเหล่านี้ผ่านหน้า admin.html ได้ โดยไม่ต้องแก้โค้ด
 async function loadFormConfig(){
-  let config = DEFAULT_CONFIG;
+  // แสดงรายการเริ่มต้นทันที โดยไม่ต้องรอเน็ต เพื่อไม่ให้ dropdown ว่างระหว่างโหลด
+  applyConfig(DEFAULT_CONFIG);
+
   try{
     if(!APPS_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")){
       const res = await fetch(`${APPS_SCRIPT_URL}?action=getConfig`);
       const data = await res.json();
       if(data && data.status !== "error"){
-        config = {
+        const config = {
           departments: data.departments?.length ? data.departments : DEFAULT_CONFIG.departments,
           equipmentTypes: data.equipmentTypes?.length ? data.equipmentTypes : DEFAULT_CONFIG.equipmentTypes,
           causes: data.causes?.length ? data.causes : DEFAULT_CONFIG.causes,
           itemSuggestions: data.itemSuggestions?.length ? data.itemSuggestions : DEFAULT_CONFIG.itemSuggestions
         };
+        // อัปเดตเป็นรายการล่าสุดจาก Google Sheet (ถ้าต่างจากค่าเริ่มต้น)
+        applyConfig(config);
       }
     }
   }catch(err){
     console.warn("โหลดรายการจาก Google Sheet ไม่สำเร็จ ใช้ค่าเริ่มต้นแทน", err);
   }
+}
+
+function applyConfig(config){
   populateSelect(departmentEl, config.departments);
   populateSelect(equipTypeEl, config.equipmentTypes);
   populateSelect(causeEl, config.causes);
@@ -72,7 +79,11 @@ async function loadFormConfig(){
 }
 
 // เติม <option> เข้าไปก่อนตัวเลือก "อื่นๆ" ที่อยู่ท้ายสุดของ select เดิม
+// ลบตัวเลือกที่เพิ่มไว้ก่อนหน้า (ถ้ามี) ออกก่อนเสมอ กันไม่ให้รายการซ้ำตอนอัปเดตรอบสอง
 function populateSelect(selectEl, items){
+  Array.from(selectEl.options).forEach(o => {
+    if(o.value !== "" && o.value !== "อื่นๆ") o.remove();
+  });
   const otherOption = Array.from(selectEl.options).find(o => o.value === "อื่นๆ");
   items.forEach(text => {
     const opt = document.createElement("option");
